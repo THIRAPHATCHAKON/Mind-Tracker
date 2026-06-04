@@ -22,27 +22,30 @@ export default function Layout({ children }: { children: ReactNode }) {
           <div className="flex items-center justify-between px-4 sm:px-6 h-16">
             <div className="lg:hidden flex items-center gap-3">
               <div className="h-8 w-8 rounded-lg bg-primary flex items-center justify-center">
-                <span className="text-primary-foreground font-bold text-xs">MT</span>
+                <span className="text-primary-foreground font-bold text-xs" aria-hidden="true">MT</span>
               </div>
               <h1 className="font-semibold">Mind Tracker</h1>
             </div>
             <div className="hidden lg:block" />
             <div className="flex items-center gap-3">
-              <Button variant="ghost" size="icon">
+              <Button variant="ghost" size="icon" aria-label="Notifications">
                 <Bell className="h-5 w-5" />
               </Button>
               {user && (
-                <div className="flex items-center gap-3">
+                <div className="flex items-center gap-3" role="region" aria-label="User menu">
                   <div className="hidden sm:block text-right">
                     <p className="text-sm font-medium">{user.username}</p>
                     <p className="text-xs text-muted-foreground">{user.email}</p>
                   </div>
-                  <div className="h-9 w-9 rounded-full bg-primary/20 flex items-center justify-center">
+                  <div
+                    className="h-9 w-9 rounded-full bg-primary/20 flex items-center justify-center"
+                    aria-hidden="true"
+                  >
                     <span className="text-sm font-semibold text-primary">
                       {user.username.charAt(0).toUpperCase()}
                     </span>
                   </div>
-                  <Button variant="ghost" size="icon" onClick={handleLogout}>
+                  <Button variant="ghost" size="icon" onClick={handleLogout} aria-label="Logout">
                     <LogOut className="h-5 w-5" />
                   </Button>
                 </div>
@@ -50,7 +53,7 @@ export default function Layout({ children }: { children: ReactNode }) {
             </div>
           </div>
         </header>
-        <main className="p-4 sm:p-6 lg:p-8">{children}</main>
+        <main id="main-content" className="p-4 sm:p-6 lg:p-8">{children}</main>
       </div>
     </div>
   );

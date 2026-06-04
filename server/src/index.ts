@@ -2,7 +2,6 @@ import express from "express";
 import cors from "cors";
 import authRoutes from "./routes/auth";
 import habitRoutes from "./routes/habits";
-import taskRoutes from "./routes/tasks";
 import completionRoutes from "./routes/completions";
 import analyticsRoutes from "./routes/analytics";
 
@@ -14,7 +13,6 @@ app.use(express.json());
 
 app.use("/api/auth", authRoutes);
 app.use("/api/habits", habitRoutes);
-app.use("/api/tasks", taskRoutes);
 app.use("/api/completions", completionRoutes);
 app.use("/api/analytics", analyticsRoutes);
 

@@ -1,0 +1,21 @@
+import{f as h,r as l,j as d,c as M,d as L}from"./index-02SKyT6N.js";/**
+ * @license lucide-react v0.460.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */const H=h("ChevronLeft",[["path",{d:"m15 18-6-6 6-6",key:"1wnfg3"}]]);/**
+ * @license lucide-react v0.460.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */const U=h("ChevronRight",[["path",{d:"m9 18 6-6-6-6",key:"mthhwq"}]]);/**
+ * @license lucide-react v0.460.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */const J=h("Flame",[["path",{d:"M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z",key:"96xj49"}]]);function A(e,r=[]){let s=[];function n(u,i){const t=l.createContext(i);t.displayName=u+"Context";const a=s.length;s=[...s,i];const p=v=>{var C;const{scope:c,children:g,...m}=v,f=((C=c==null?void 0:c[e])==null?void 0:C[a])||t,I=l.useMemo(()=>m,Object.values(m));return d.jsx(f.Provider,{value:I,children:g})};p.displayName=u+"Provider";function b(v,c){var f;const g=((f=c==null?void 0:c[e])==null?void 0:f[a])||t,m=l.useContext(g);if(m)return m;if(i!==void 0)return i;throw new Error(`\`${v}\` must be used within \`${u}\``)}return[p,b]}const o=()=>{const u=s.map(i=>l.createContext(i));return function(t){const a=(t==null?void 0:t[e])||u;return l.useMemo(()=>({[`__scope${e}`]:{...t,[e]:a}}),[t,a])}};return o.scopeName=e,[n,V(o,...r)]}function V(...e){const r=e[0];if(e.length===1)return r;const s=()=>{const n=e.map(o=>({useScope:o(),scopeName:o.scopeName}));return function(u){const i=n.reduce((t,{useScope:a,scopeName:p})=>{const v=a(u)[`__scope${p}`];return{...t,...v}},{});return l.useMemo(()=>({[`__scope${r.scopeName}`]:i}),[i])}};return s.scopeName=r.scopeName,s}var D=["a","button","div","form","h2","h3","img","input","label","li","nav","ol","p","select","span","svg","ul"],y=D.reduce((e,r)=>{const s=M(`Primitive.${r}`),n=l.forwardRef((o,u)=>{const{asChild:i,...t}=o,a=i?s:r;return typeof window<"u"&&(window[Symbol.for("radix-ui")]=!0),d.jsx(a,{...t,ref:u})});return n.displayName=`Primitive.${r}`,{...e,[r]:n}},{}),P="Progress",N=100,[O]=A(P),[k,F]=O(P),S=l.forwardRef((e,r)=>{const{__scopeProgress:s,value:n=null,max:o,getValueLabel:u=T,...i}=e;(o||o===0)&&!$(o)&&console.error(G(`${o}`,"Progress"));const t=$(o)?o:N;n!==null&&!w(n,t)&&console.error(X(`${n}`,"Progress"));const a=w(n,t)?n:null,p=x(a)?u(a,t):void 0;return d.jsx(k,{scope:s,value:a,max:t,children:d.jsx(y.div,{"aria-valuemax":t,"aria-valuemin":0,"aria-valuenow":x(a)?a:void 0,"aria-valuetext":p,role:"progressbar","data-state":R(a,t),"data-value":a??void 0,"data-max":t,...i,ref:r})})});S.displayName=P;var _="ProgressIndicator",j=l.forwardRef((e,r)=>{const{__scopeProgress:s,...n}=e,o=F(_,s);return d.jsx(y.div,{"data-state":R(o.value,o.max),"data-value":o.value??void 0,"data-max":o.max,...n,ref:r})});j.displayName=_;function T(e,r){return`${Math.round(e/r*100)}%`}function R(e,r){return e==null?"indeterminate":e===r?"complete":"loading"}function x(e){return typeof e=="number"}function $(e){return x(e)&&!isNaN(e)&&e>0}function w(e,r){return x(e)&&!isNaN(e)&&e<=r&&e>=0}function G(e,r){return`Invalid prop \`max\` of value \`${e}\` supplied to \`${r}\`. Only numbers greater than 0 are valid max values. Defaulting to \`${N}\`.`}function X(e,r){return`Invalid prop \`value\` of value \`${e}\` supplied to \`${r}\`. The \`value\` prop must be:
+  - a positive number
+  - less than the value passed to \`max\` (or ${N} if no \`max\` prop is set)
+  - \`null\` or \`undefined\` if the progress is indeterminate.
+
+Defaulting to \`null\`.`}var E=S,q=j;const z=l.forwardRef(({className:e,value:r,...s},n)=>d.jsx(E,{ref:n,className:L("relative h-2 w-full overflow-hidden rounded-full bg-primary/20",e),...s,children:d.jsx(q,{className:"h-full w-full flex-1 bg-primary transition-all duration-500 ease-out",style:{transform:`translateX(-${100-(r||0)}%)`}})}));z.displayName=E.displayName;export{H as C,J as F,z as P,U as a};
