@@ -15,19 +15,18 @@ router.get("/", async (req: any, res) => {
   }
   const completions = await prisma.completion.findMany({
     where,
-    include: { habit: true, task: true },
+    include: { habit: true },
     orderBy: { date: "desc" },
   });
   res.json(completions);
 });
 
 router.post("/", async (req: any, res) => {
-  const { habitId, taskId, date, completed } = req.body;
+  const { habitId, date, completed } = req.body;
   const existing = await prisma.completion.findFirst({
     where: {
       userId: req.userId,
-      habitId: habitId || null,
-      taskId: taskId || null,
+      habitId,
       date: new Date(date),
     },
   });
@@ -41,8 +40,7 @@ router.post("/", async (req: any, res) => {
   const completion = await prisma.completion.create({
     data: {
       userId: req.userId,
-      habitId: habitId || null,
-      taskId: taskId || null,
+      habitId,
       date: new Date(date),
       completed: completed ?? true,
     },

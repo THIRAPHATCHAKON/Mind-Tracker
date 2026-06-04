@@ -33,17 +33,20 @@ export const api = {
   },
   habits: {
     list: () => request("GET", "/habits"),
-    create: (name: string, category?: string, color?: string) =>
-      request("POST", "/habits", { name, category, color }),
+    create: (name: string, category?: string, color?: string, groupId?: string) =>
+      request("POST", "/habits", { name, category, color, groupId }),
     update: (id: string, data: any) => request("PUT", `/habits/${id}`, data),
     delete: (id: string) => request("DELETE", `/habits/${id}`),
+    reorder: (groupId: string, habitIds: string[]) =>
+      request("PUT", `/habits/reorder/${groupId}`, { habitIds }),
   },
-  tasks: {
-    list: () => request("GET", "/tasks"),
-    create: (name: string, category?: string, color?: string) =>
-      request("POST", "/tasks", { name, category, color }),
-    update: (id: string, data: any) => request("PUT", `/tasks/${id}`, data),
-    delete: (id: string) => request("DELETE", `/tasks/${id}`),
+  habitGroups: {
+    list: () => request("GET", "/habits/groups"),
+    create: (name: string) => request("POST", "/habits/groups", { name }),
+    update: (id: string, name: string) => request("PUT", `/habits/groups/${id}`, { name }),
+    delete: (id: string) => request("DELETE", `/habits/groups/${id}`),
+    reorder: (groupIds: string[]) =>
+      request("PUT", "/habits/groups/reorder", { groupIds }),
   },
   completions: {
     list: (startDate?: string, endDate?: string) => {
@@ -51,12 +54,49 @@ export const api = {
       if (startDate && endDate) path += `?startDate=${startDate}&endDate=${endDate}`;
       return request("GET", path);
     },
-    toggle: (date: string, habitId?: string, taskId?: string) =>
-      request("POST", "/completions", { date, habitId: habitId || null, taskId: taskId || null }),
+    toggle: (date: string, habitId: string) =>
+      request("POST", "/completions", { date, habitId }),
   },
   analytics: {
-    overview: () => request("GET", "/analytics/overview"),
-    habits: () => request("GET", "/analytics/habits"),
-    weekly: () => request("GET", "/analytics/weekly"),
+    overview: (year?: number, month?: number) => {
+      let path = "/analytics/overview";
+      const params: string[] = [];
+      if (year !== undefined) params.push(`year=${year}`);
+      if (month !== undefined) params.push(`month=${month}`);
+      if (params.length) path += `?${params.join("&")}`;
+      return request("GET", path);
+    },
+    habits: (year?: number, month?: number) => {
+      let path = "/analytics/habits";
+      const params: string[] = [];
+      if (year !== undefined) params.push(`year=${year}`);
+      if (month !== undefined) params.push(`month=${month}`);
+      if (params.length) path += `?${params.join("&")}`;
+      return request("GET", path);
+    },
+    weekly: (year?: number, month?: number) => {
+      let path = "/analytics/weekly";
+      const params: string[] = [];
+      if (year !== undefined) params.push(`year=${year}`);
+      if (month !== undefined) params.push(`month=${month}`);
+      if (params.length) path += `?${params.join("&")}`;
+      return request("GET", path);
+    },
+    trends: (year?: number, month?: number) => {
+      let path = "/analytics/trends";
+      const params: string[] = [];
+      if (year !== undefined) params.push(`year=${year}`);
+      if (month !== undefined) params.push(`month=${month}`);
+      if (params.length) path += `?${params.join("&")}`;
+      return request("GET", path);
+    },
+    longestStreak: (year?: number, month?: number) => {
+      let path = "/analytics/longest-streak";
+      const params: string[] = [];
+      if (year !== undefined) params.push(`year=${year}`);
+      if (month !== undefined) params.push(`month=${month}`);
+      if (params.length) path += `?${params.join("&")}`;
+      return request("GET", path);
+    },
   },
 };
