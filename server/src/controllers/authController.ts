@@ -3,6 +3,10 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { PrismaClient } from "@prisma/client";
 import { z } from "zod";
+import cypto from "crypto";
+import { transport }  from  "../service/mail" ;
+
+
 
 const prisma = new PrismaClient();
 
@@ -28,11 +32,13 @@ export async function register(req: Request, res: Response) {
     }
     const hashedPassword = await bcrypt.hash(data.password, 12);
     const user = await prisma.user.create({
-      data: { username: data.username, email: data.email, password: hashedPassword },
+      data: { username: data.username, email: data.email, password: hashedPassword, verified: false, verifyToken: cypto.randomBytes(32).toString("hex"), verifyTokenExpiry: new Date(Date.now() + 24 * 60 * 60 * 1000) },
     });
     const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET || "fallback", {
       expiresIn: (process.env.JWT_EXPIRES_IN || "7d") as jwt.SignOptions["expiresIn"],
     });
+    const verifyurl = `${process.env.CLIENT_URL}/api/auth/verify?token=${user.verifyToken}`;
+    await transport.sendMail
     res.status(201).json({
       token,
       user: { id: user.id, username: user.username, email: user.email, avatar: user.avatar },

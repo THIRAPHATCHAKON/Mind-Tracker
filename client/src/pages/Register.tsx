@@ -28,7 +28,7 @@ export default function Register() {
     setLoading(true);
     try {
       await register(username, email, password);
-      navigate("/dashboard");
+      navigate("/CheckEmail");
     } catch (err: any) {
       setError(err.message || "Registration failed");
     } finally {
