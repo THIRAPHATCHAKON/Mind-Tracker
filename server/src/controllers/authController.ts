@@ -3,7 +3,7 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { PrismaClient } from "@prisma/client";
 import { z } from "zod";
-import cypto from "crypto";
+import crypto from "crypto";
 import { transport }  from  "../service/mail" ;
 
 
@@ -32,22 +32,34 @@ export async function register(req: Request, res: Response) {
     }
     const hashedPassword = await bcrypt.hash(data.password, 12);
     const user = await prisma.user.create({
-      data: { username: data.username, email: data.email, password: hashedPassword, verified: false, verifyToken: cypto.randomBytes(32).toString("hex"), verifyTokenExpiry: new Date(Date.now() + 24 * 60 * 60 * 1000) },
+      data: { username: data.username, email: data.email, password: hashedPassword, verified: false, verifyToken: crypto.randomBytes(32).toString("hex"), verifyTokenExpiry: new Date(Date.now() + 24 * 60 * 60 * 1000) },
     });
-    const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET || "fallback", {
-      expiresIn: (process.env.JWT_EXPIRES_IN || "7d") as jwt.SignOptions["expiresIn"],
+    const verifyurl = `http://localhost:5000/api/auth/verify/${user.verifyToken}`;
+    await transport.sendMail({
+      from: user.email,
+      to:user.email,
+      subject: "Verify Your Email",
+      html: `
+          <h2>Welcome!</h2>
+
+          <p>
+            Click the button below to verify your email.
+          </p>
+
+          <a href="${verifyurl}">
+            Verify Email
+          </a>
+      `,
     });
-    const verifyurl = `${process.env.CLIENT_URL}/api/auth/verify?token=${user.verifyToken}`;
-    await transport.sendMail
     res.status(201).json({
-      token,
-      user: { id: user.id, username: user.username, email: user.email, avatar: user.avatar },
+      message: "Verification email sent",
     });
   } catch (err) {
     if (err instanceof z.ZodError) {
       return res.status(400).json({ error: err.errors[0].message });
     }
-    res.status(500).json({ error: "Internal server error" });
+    res.status(500).json({ error: "Internal server error" })
+    console.error(err) ;
   }
 }
 
@@ -73,7 +85,7 @@ export async function login(req: Request, res: Response) {
     if (err instanceof z.ZodError) {
       return res.status(400).json({ error: err.errors[0].message });
     }
-    res.status(500).json({ error: "Internal server error" });
+    res.status(500).json({ error: "Internal server error" })
   }
 }
 
@@ -85,4 +97,46 @@ export async function getMe(req: Request, res: Response) {
   });
   if (!user) return res.status(404).json({ error: "User not found" });
   res.json(user);
+}
+
+export async function verifyEmail(
+  req: Request,
+  res: Response
+) {
+  try {
+
+    // 1. รับ token
+  const token = req.params;
+  if (typeof token !== "string") {
+    return res.status(400).json({
+      error: "Invalid token",
+    });
+  }
+
+  const user = await prisma.user.findFirst({
+  where: {
+      verifyToken: token,
+    },
+  });
+  if (!user) {
+    return res.status(400).json({
+      error: "Invalid token",
+    });
+  }
+    // 4. update verified
+    await prisma.user.update({
+      where:{
+        id: user.id,
+      },
+      data:{
+        verified: true,
+        verifyToken: null,
+        verifyTokenExpiry: null,
+      }
+    }) ;
+    // 5. redirect success
+    res.redirect(`${process.env.CLIENT_URL}/login`) ;
+  } catch {
+    res.status(500).json({ error: "Internal server error" })
+  }
 }
