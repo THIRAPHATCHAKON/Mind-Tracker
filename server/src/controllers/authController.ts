@@ -77,6 +77,10 @@ export async function login(req: Request, res: Response) {
     const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET || "fallback", {
       expiresIn: (process.env.JWT_EXPIRES_IN || "7d") as jwt.SignOptions["expiresIn"],
     });
+    const verified = user.verified;
+    if (!verified) {
+      return res.status(403).json({ error: "Email not verified" });
+    }
     res.json({
       token,
       user: { id: user.id, username: user.username, email: user.email, avatar: user.avatar },
@@ -106,7 +110,7 @@ export async function verifyEmail(
   try {
 
     // 1. รับ token
-  const token = req.params;
+  const token = req.params.token as string;
   if (typeof token !== "string") {
     return res.status(400).json({
       error: "Invalid token",
